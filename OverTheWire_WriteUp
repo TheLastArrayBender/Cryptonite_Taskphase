@@ -1,0 +1,234 @@
+# OverTheWire Bandit CTF Writeup
+
+## Level 0 to Level 1
+
+In this first challenge, we need to log into the server using SSH. The command to do this is:
+
+```bash
+ssh bandit0@bandit.labs.overthewire.org -p 2220
+```
+
+We use the password `bandit0` when prompted. Once logged in, we need to find the password for the next level. The password is stored in a file called `readme` in the home directory. We can use the `ls` command to list the files in the directory and `cat` to read the file:
+
+```bash
+ls
+cat readme
+```
+This command will display the contents of the `readme` file, which is the password for the next level.
+
+Password: `NH2SXQwcBdpmTEzi3bvBHMM9H66vVXjL`
+
+
+
+## Level 1 to Level 2
+
+To progress to the next level, we need to exit the current level using the `exit` command and log in again using SSH, but this time to `bandit1`. We use the password we obtained from the `readme` file in the previous level.
+
+The password for this level is stored in a file called `-`. To read the file, we use the `cat` command with `./` prefix:
+
+```bash
+ls
+cat ./-
+```
+The `./` prefix is used to specify that the file is in the current directory. This is necessary because `-` is also an option in many commands.
+
+Password: `NH2SXQwcBdpmTEzi3bvBHMM9H66vVXjL`
+
+
+
+## Level 2 to Level 3
+
+We log in to the server as `bandit2` using the password obtained from the previous level. The password for this level is stored in a file called `spaces in this filename`. To read this file, we can use the `cat` command with backslashes to escape the spaces or use tab to autocomplete the file name [or we can just type cat spaces and press the TAB button to autocomplete the filename]:
+
+```bash
+ls
+cat spaces\ in\ this\ filename
+```
+The backslashes are used to escape the spaces in the filename, allowing the `cat` command to interpret it as a single argument rather than separate ones.
+
+Password: `aBZ0W5EmUfAf7kHTQeOwd8bauFJ2lAiG`
+
+
+
+## Level 3 to Level 4
+
+We log in to the server as `bandit3` using the password obtained from the previous level. The password for this level is stored in a hidden file in the `inhere` directory. We can use the `ls -lah` command to list all files, including hidden ones, and `cat` to read the file:
+
+```bash
+ls
+cd inhere
+ls -lah
+cat .hidden
+```
+The `ls -lah` command lists all files, including hidden ones, in a human-readable format.
+
+Password: `2EW7BBsr6aMMoJ2HjW067dm8EgX26xNe`
+
+
+
+## Level 4 to Level 5
+
+We log in to the server as `bandit4` using the password obtained from the previous level. The password for this level is stored in one of the files in the `inhere` directory. We can use the `ls` command to list the files and `cat` to read each file one by one. The password is in the `-file07` file:
+
+```bash
+ls
+cd inhere
+ls
+cat ./-file07
+```
+The `./` prefix is used again here to specify that the file is in the current directory.
+
+Password: `lrIWWI6bB37kxfiCQZqUdOIYfr6eEeqR`
+
+
+
+## Level 5 to Level 6
+
+In this level, we need to find a file in the `inhere` directory that is human-readable, 1033 bytes in size, and not executable. We can use the `find` command to do this:
+
+```bash
+ls
+cd inhere
+find . -type f -size 1033c ! -executable
+```
+The `find` command is used to search for files in a directory hierarchy. The `-type f` option specifies that we re looking for files, `-size 1033c` specifies that the file size should be 1033 bytes, and `! -executable` specifies that the file should not be executable.
+
+This command will give the output `./maybehere07/.file2`. We can then read the file to get the password:
+
+```bash
+cat ./maybehere07/.file2
+```
+The `cat` command is used to read the contents of a file.
+
+Password: `P4L4vucdmLnm8I7Vl7jG1ApGSfjYKqJU`
+
+
+
+## Level 6 to Level 7
+
+In this level, we need to find a file on the server owned by `bandit7` and `bandit6`, and 33 bytes in size. We can use the `find` command again to do this:
+
+```bash
+find / -user bandit7 -group bandit6 -size 33c 2>/dev/null
+```
+The `find` command is used to search for files in a directory hierarchy. The `-user` option specifies that we re looking for files owned by `bandit7`, the `-group` option specifies that the file should belong to the group `bandit6`, `-size 33c` specifies that the file size should be 33 bytes, and `2>/dev/null` redirects error messages to `/dev/null` to avoid cluttering the output.
+
+This command will give the output `/var/lib/dpkg/info/bandit7.password`. We can then read the file to get the password:
+
+```bash
+cat /var/lib/dpkg/info/bandit7.password
+```
+The `cat` command is used to read the contents of a file.
+
+Password: `z7WtoNQU2XfjmMtWA8u5rN4vzqu4v99S`
+
+
+
+## Level 7 to Level 8
+
+In this level, we need to find the password in the `data.txt` file next to the word `millionth`. We can use the `cat` command to read the file and `grep` to find the line containing `millionth`:
+
+```bash
+ls
+cat data.txt | grep 'millionth'
+```
+The `grep` command is used to search for a specific pattern in the input. In this case, we re searching for the word `millionth`.
+
+Password: `TESKZC0XvTetK0S9xNwm25STk5iWrBvP`
+
+
+
+## Level 8 to Level 9
+
+In this level, the password is the only line of text that occurs only once in the `data.txt` file. We can use the `sort` and `uniq` commands to find this line:
+
+```bash
+ls
+sort data.txt | uniq -c | grep '1 '
+```
+The `sort` command is used to sort the lines in the file, `uniq -c` is used to count the number of occurrences of each line, and `grep '1 '` is used to find the lines that only occur once. There is a space after '1 ' so that it does not print the lines which repeat 1x or 1xx times.
+
+Password: `EN632PlfYiZbn3PhVK3XOGSlNInNE00t`
+
+
+
+## Level 9 to Level 10
+
+In this level, the password is stored in the `data.txt` file and is surrounded by equal signs. We can use the `strings` command to extract the lines containing printable characters, and `grep` to find the line containing `=`:
+
+```bash
+ls
+strings data.txt | grep '='
+```
+The `strings` command is used to extract printable strings from a file, and `grep` is used to search for a specific pattern, in this case, the equal sign.
+
+Password: `G7w8LIi6J3kTb8A7j9LgrywtEUlyyp6s`
+
+
+
+#### Level 10 → Level 11
+Logged in with the username `bandit10` and the aforementioned password.
+
+Ran `ls`. Got `data.txt` again. The clue says that it contains base64 encoded data, which I could decode using `cat data.txt | base64 --decode`.
+
+```bash
+ls
+base64 --decode data.txt
+```
+
+The output was `The password is 6zPeziLdR2RKNdNYFNb6nVCKzphlXHBM`.
+
+Password: `6zPeziLdR2RKNdNYFNb6nVCKzphlXHBM`
+
+
+
+## Level 11 to Level 12
+
+In this level, the password is stored in the `data.txt` file and is encrypted using rot13 encryption. We can use the `cat` command to read the file and `tr` command to decode the rot13 encrypted password:
+
+```bash
+ls
+cat data.txt
+cat data.txt | tr '[A-Za-z]' '[N-ZA-Mn-za-m]'
+```
+The `tr` command is used to translate or delete characters. In this case, it is used to rotate the alphabet by 13 places, which is used to decode rot13 encryption. [Source 0](https://medium.com/secttp/overthewire-bandit-level-12-439f655f6fd5)
+
+This command will give the decoded output `The password is JVNBBFSmZwKKOP0XbFXOoW8chDz5yVRv`. 
+
+Password: `JVNBBFSmZwKKOP0XbFXOoW8chDz5yVRv`
+
+
+
+## Level 12 to Level 13
+
+In this level, the password is stored in the `data.txt` file which is a hexdump of a file that has been repeatedly compressed. To get the password, we first need to create a temporary directory and copy the `data.txt` file to it. Then, we can use `xxd` to convert the hexdump back to binary, and `file` to identify the type of compression used. We can then decompress the file using the appropriate command, repeating these steps until we get a text file containing the password:
+
+```bash
+mkdir /tmp/mytempdir
+cp data.txt /tmp/mytempdir/
+cd /tmp/mytempdir/
+xxd -r data.txt > data
+file data
+mv data data.gz
+gunzip data.gz
+file data
+mv data data.bz2
+bunzip2 data.bz2
+file data
+tar xvf data
+file data5.bin
+tar xvf data5.bin
+file data6.bin
+mv data6.bin data6.bz2
+bunzip2 data6.bz2
+file data6
+tar xvf data6
+file data8.bin
+mv data8.bin data8.gz
+gunzip data8.gz
+file data8
+cat data8
+```
+The `xxd` command is used to create a hexdump or do the reverse. The `file` command is used to determine the type of a file. `gunzip`, `bunzip2`, and `tar` are used to decompress files.
+
+Password: `8ZjyCRiBWFYkneahHwxCv3wb2a1ORpYL`
