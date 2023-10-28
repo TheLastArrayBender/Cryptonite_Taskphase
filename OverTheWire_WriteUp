@@ -232,3 +232,192 @@ cat data8
 The `xxd` command is used to create a hexdump or do the reverse. The `file` command is used to determine the type of a file. `gunzip`, `bunzip2`, and `tar` are used to decompress files.
 
 Password: `8ZjyCRiBWFYkneahHwxCv3wb2a1ORpYL`
+
+## Level 13 to Level 14
+
+In this level, you are given a private SSH key that can be used to log into the next level. You can use the `ssh` command with the `-i` option to specify the private key:
+
+```bash
+ssh -i sshkey.private bandit14@bandit.labs.overthewire.org -p 2220
+```
+
+After logging in with the private key, you can read the password for the next level from the `/etc/bandit_pass/bandit14` file.
+
+Password: `4wcYUJFw0k0XLShlDzztnTBHiqxU3b3e`
+
+## Level 14 to Level 15
+
+In this level, the password for the next level can be retrieved by submitting the password of the current level to port 30000 on localhost. You can use the `cat` command to read the password and pipe it to the `nc` (netcat) command:
+
+```bash
+cat /etc/bandit_pass/bandit14 | nc localhost 30000
+```
+
+Password: `BfMYroe26WYalil77FoDi9qh59eK5xNr`
+
+## Level 15 to Level 16
+
+In this level, the password for the next level can be retrieved by submitting the password of the current level to port 30001 on localhost using SSL encryption. You can use the `openssl` command to establish a SSL connection:
+
+```bash
+cat /etc/bandit_pass/bandit15 | openssl s_client -connect localhost:30001 -quiet
+```
+
+Password: `cluFn7wTiGryunymYOu4RcffSxQluehd`
+
+## Level 16 to Level 17
+
+In this level, the password for the next level can be retrieved by submitting the password of the current level to a port on localhost in the range 31000 to 32000. You need to first identify the port that is listening and supports SSL. You can use a simple bash loop to check each port:
+
+```bash
+for i in {31000..32000}; do
+  echo "" | openssl s_client -connect localhost:$i -quiet 2>/dev/null && echo "Port $i supports SSL"
+done
+```
+
+This command will output the ports that support SSL. You can then submit the password to the correct port:
+
+```bash
+cat /etc/bandit_pass/bandit16 | openssl s_client -connect localhost:<port> -quiet
+```
+
+Replace `<port>` with the correct port number.
+
+Password: `xLYVMN9WE5zQ5vHacb0sZEVqbrp7nBTn`
+
+## Level 17 to Level 18
+
+In this level, there are 2 files in the home directory: `passwords.old` and `passwords.new`. The password for the next level is in `passwords.new` and is the only line that has been changed between `passwords.old` and `passwords.new`. You can use the `diff` command to compare the two files:
+
+```bash
+diff passwords.old passwords.new
+```
+
+Password: `kfBf3eYk5BPBRzwjqutbbfE887SVc5Yd`
+
+## Level 19 to Level 20
+
+In this level, you need to use the `bandit20-do` setuid binary in the home directory. This binary will run a command as another user:
+
+```bash
+./bandit20-do cat /etc/bandit_pass/bandit20
+```
+
+This command will execute the `cat` command as the `bandit20` user, allowing you to read the password for the next level.
+
+Password: `GbKksEFF4yrVs6il55v6gwY5aVje5f0j`
+
+## Level 20 to Level 21
+
+In this level, there is a setuid binary in the home directory that makes a connection to localhost on the port you specify as a commandline argument. It then reads a line of text from the connection and compares it to the password in the previous level (bandit20). If the password is correct, it will transmit the password for the next level (bandit21).
+
+You need to set a listener in one terminal, and then run the binary in another terminal:
+
+Terminal 1:
+```bash
+nc -lp 31337 < /etc/bandit_pass/bandit20
+```
+
+Terminal 2:
+```bash
+./suconnect 31337
+```
+
+The password for the next level should appear in your first terminal.
+
+Password: `gE269g2h3mw3pwgrj0Ha9Uoqen1c9DGr`
+
+Level 21 to Level 22
+
+In this level, a program is running automatically at regular intervals from cron, the time-based job scheduler. If you look in `/etc/cron.d/` for the configuration, you can see what command is being executed:
+
+```bash
+cat /etc/cron.d/cronjob_bandit22
+```
+
+This reveals that a script named `cronjob_bandit22.sh` is being run. You can view the contents of this script to see what it does:
+
+```bash
+cat /usr/bin/cronjob_bandit22.sh
+```
+
+The script writes the password for the next level to a file in the `/tmp` directory. You can read the password from this file:
+
+```bash
+cat /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+```
+
+Password: `Yk7owGAcWjwMVRwrTesJEwB7WVOiILLI`
+
+## Level 22 to Level 23
+
+Similarly to the previous level, a program is running automatically at regular intervals from cron. If you look in `/etc/cron.d/` for the configuration, you can see what command is being executed:
+
+```bash
+cat /etc/cron.d/cronjob_bandit23
+```
+
+This reveals that a script named `cronjob_bandit23.sh` is being run. You can view the contents of this script to see what it does:
+
+```bash
+cat /usr/bin/cronjob_bandit23.sh
+```
+
+The script writes the password for the next level to a file in the `/tmp` directory. The name of the file is a hash of the username. You can calculate the hash of the username `bandit23` and read the password from the corresponding file:
+
+```bash
+echo I am user bandit23 | md5sum | cut -d ' ' -f 1
+```
+
+This command will output the hash of the username. You can then read the password from the corresponding file in the `/tmp` directory:
+
+```bash
+cat /tmp/<hash>
+```
+
+Replace `<hash>` with the output of the previous command.
+
+Password: `jc1udXuA1tiHqjIsL8yaapX5XIAI6i0n`
+
+## Level 23 to Level 24
+
+In this level, a program is running automatically at regular intervals from cron, the time-based job scheduler. If you look in `/etc/cron.d/` for the configuration, you can see what command is being executed:
+
+```bash
+ls -la /etc/cron.d/
+```
+
+This reveals that a script named `cronjob_bandit24.sh` is being run. You can view the contents of this script to see what it does:
+
+```bash
+cat /usr/bin/cronjob_bandit24.sh
+```
+
+The script executes and deletes all scripts in `/var/spool/bandit24`. We just need to write our own script, copy it in `/var/spool/bandit24` and wait for the result:
+
+```bash
+mkdir /tmp/alex1234
+cd /tmp/alex1234
+vi script.sh
+```
+
+Inside the `script.sh`, include the following line:
+
+```bash
+#!/bin/sh
+cat /etc/bandit_pass/bandit24 >> /tmp/alex1234/bandit24pass
+```
+
+Then, change the script permissions, copy it to the `/var/spool/bandit24` directory, and wait for the result:
+
+```bash
+chmod 777 script.sh 
+cp script.sh /var/spool/bandit24
+chmod 777 /tmp/alex1234/
+# Wait 1 minute
+ls
+cat bandit24pass 
+```
+
+Password: `UoMYTrfrBFHyQXmg6gzctqAwOmw1IohZ`
+
