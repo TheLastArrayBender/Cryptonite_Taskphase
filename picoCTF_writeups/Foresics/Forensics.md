@@ -40,7 +40,7 @@ for key in ALPHABET:
     print(decode(b16))
 ```
 
-This code first tries all possible keys from 'a' to 'p' to unshift the characters in the given encrypted flag. It then decodes the unshifted flag and prints the result. The correct decrypted flag is the one that contains meaningful words [Source 3](https://www.scaler.com/topics/caesar-cipher-python/), [Source 4](https://www.geeksforgeeks.org/caesar-cipher-in-cryptography/), [Source 9](https://the-algorithms.com/algorithm/caesar-cipher?lang=python).
+This code first tries all possible keys from 'a' to 'p' to unshift the characters in the given encrypted flag. It then decodes the unshifted flag and prints the result. The correct decrypted flag is the one that contains meaningful words.
 
 ## 2. miniRSA
 
@@ -52,8 +52,7 @@ The decryption is done using the formula `m = c^d mod N`, where `d` is the priva
 
 In this case, because `e` is small, you can use brute force to find the plaintext message `m` that, when encrypted, equals the given ciphertext `c`.
 
-You can use online tools like the dcode RSA decryptor to decrypt the ciphertext [Source 4](https://www.geeksforgeeks.org/caesar-cipher-in-cryptography/).
-
+You can use online tools like the dcode RSA decryptor to decrypt the ciphertext.
 ## 3. basic-mod1
 
 In this problem, a message is encrypted by converting each number to its remainder when divided by 37 (mod 37), and then using these remainders as indices in a list of characters.
@@ -75,4 +74,4 @@ for char in message:
     print(keys[char % 37])
 ```
 
-This code first creates a list of characters, where the indices are the remainders when divided by 37. It then converts each number in the message back to its character representation by finding its remainder when divided by 37 and using this as an index in the list of characters [Source 0](https://dev.to/ramakm/caesar-cipher-encryption-decryption
+This code first creates a list of characters, where the indices are the remainders when divided by 37. It then converts each number in the message back to its character representation by finding its remainder when divided by 37 and using this as an index in the list of characters.
